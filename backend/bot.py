@@ -1,10 +1,8 @@
-
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-
 
 def menu_principal():
     return InlineKeyboardMarkup([
@@ -25,6 +23,8 @@ def menu_principal():
         ],
     ])
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await mostrar_menu(update, context)
 
 async def mostrar_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     texto = (
@@ -50,6 +50,7 @@ async def mostrar_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown",
             reply_markup=menu_principal()
         )
+
 async def precios(update: Update, context: ContextTypes.DEFAULT_TYPE):
     texto = (
         "💰 *PRECIOS DE JONISAI*\n\n"
@@ -78,7 +79,6 @@ async def precios(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="Markdown",
         reply_markup=teclado
     )
-
 
 async def comprar(update: Update, context: ContextTypes.DEFAULT_TYPE):
     texto = (
@@ -135,135 +135,44 @@ async def ia(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=teclado
     )
 
-
 async def cuenta(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    texto = (
-        "👤 *MI CUENTA*\n\n"
-        "Aquí podrás consultar:\n\n"
-        "🪙 Tus tokens\n"
-        "🆔 Tu ID de acceso\n"
-        "📦 Tus compras\n"
-        "💳 Tu plan\n\n"
-        "⚙️ Sistema de cuenta en preparación."
-    )
-
-    teclado = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🛒 Comprar tokens", callback_data="comprar")],
-        [InlineKeyboardButton("⬅️ Volver al menú", callback_data="menu")],
-    ])
-
-    await update.callback_query.edit_message_text(
-        texto,
-        parse_mode="Markdown",
-        reply_markup=teclado
-    )
+    texto = "👤 *Mi Cuenta*\n\nAquí verás tus tokens restantes y estado de suscripción."
+    teclado = InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Volver al menú", callback_data="menu")]])
+    await update.callback_query.edit_message_text(texto, reply_markup=teclado)
 
 async def pagos(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    texto = (
-        "💳 *MÉTODOS DE PAGO*\n\n"
-        "Puedes comprar tokens de JonisAI.\n\n"
-        "🌎 Precio mostrado en:\n"
-        "🇳🇮 Córdobas (NIO)\n"
-        "🇺🇸 Dólares (USD)\n\n"
-        "🛡️ El sistema de pago automático "
-        "se conectará próximamente.\n\n"
-        "💡 Después del pago, los tokens "
-        "se agregarán a tu cuenta."
-    )
-
-    teclado = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🛒 Comprar tokens", callback_data="comprar")],
-        [InlineKeyboardButton("⬅️ Volver al menú", callback_data="menu")],
-    ])
-
-    await update.callback_query.edit_message_text(
-        texto,
-        parse_mode="Markdown",
-        reply_markup=teclado
-    )
-
+    texto = "💳 *Pagos*\n\nMétodos de pago disponibles: PayPal, Transferencia Bancaria."
+    teclado = InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Volver al menú", callback_data="menu")]])
+    await update.callback_query.edit_message_text(texto, reply_markup=teclado)
 
 async def ayuda(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    texto = (
-        "❓ *AYUDA DE JONISAI*\n\n"
-        "Puedes utilizar los siguientes comandos:\n\n"
-        "/start — 🏠 Menú principal\n"
-        "/precios — 💰 Ver precios\n"
-        "/comprar — 🛒 Comprar tokens\n"
-        "/ia — 🧠 Información de JonisAI\n"
-        "/cuenta — 👤 Mi cuenta\n"
-        "/ayuda — ❓ Ayuda\n"
-        "/soporte — 📞 Soporte\n\n"
-        "También puedes utilizar los botones "
-        "del menú."
-    )
-
-    teclado = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🏠 Menú principal", callback_data="menu")],
-    ])
-
-    await update.callback_query.edit_message_text(
-        texto,
-        parse_mode="Markdown",
-        reply_markup=teclado
-    )
-
+    texto = "❓ *Ayuda*\n\nSi tienes problemas, contacta a soporte."
+    teclado = InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Volver al menú", callback_data="menu")]])
+    await update.callback_query.edit_message_text(texto, reply_markup=teclado)
 
 async def soporte(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    texto = (
-        "📞 *SOPORTE JONISAI*\n\n"
-        "¿Tienes algún problema con tu cuenta, "
-        "tokens o compra?\n\n"
-        "Puedes escribir tu problema y "
-        "posteriormente conectaremos este botón "
-        "con nuestro sistema de soporte.\n\n"
-        "🟢 Atención automática de JonisAI."
-    )
+    texto = "📞 *Soporte*\n\nCorreo: soporte@jonisai.com"
+    teclado = InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Volver al menú", callback_data="menu")]])
+    await update.callback_query.edit_message_text(texto, reply_markup=teclado)
 
-    teclado = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🏠 Menú principal", callback_data="menu")],
-    ])
+async def menu_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await mostrar_menu(update, context)
 
-    await update.callback_query.edit_message_text(
-        texto,
-        parse_mode="Markdown",
-        reply_markup=teclado
-    )
+def main():
+    application = ApplicationBuilder().token(TOKEN).build()
 
-async def botones(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CallbackQueryHandler(menu_callback, pattern="^menu$"))
+    application.add_handler(CallbackQueryHandler(precios, pattern="^precios$"))
+    application.add_handler(CallbackQueryHandler(comprar, pattern="^comprar$"))
+    application.add_handler(CallbackQueryHandler(ia, pattern="^ia$"))
+    application.add_handler(CallbackQueryHandler(cuenta, pattern="^cuenta$"))
+    application.add_handler(CallbackQueryHandler(pagos, pattern="^pagos$"))
+    application.add_handler(CallbackQueryHandler(ayuda, pattern="^ayuda$"))
+    application.add_handler(CallbackQueryHandler(soporte, pattern="^soporte$"))
 
-    opciones = {
-        "menu": mostrar_menu,
-        "precios": precios,
-        "comprar": comprar,
-        "ia": ia,
-        "cuenta": cuenta,
-        "pagos": pagos,
-        "ayuda": ayuda,
-        "soporte": soporte,
-    }
+    print("Bot is running...")
+    application.run_polling()
 
-    funcion = opciones.get(query.data)
-
-    if funcion:
-        await funcion(update, context)
-
-
-app = Application.builder().token(TOKEN).build()
-
-app.add_handler(CommandHandler("start", mostrar_menu))
-app.add_handler(CommandHandler("precios", precios))
-app.add_handler(CommandHandler("comprar", comprar))
-app.add_handler(CommandHandler("ia", ia))
-app.add_handler(CommandHandler("cuenta", cuenta))
-app.add_handler(CommandHandler("ayuda", ayuda))
-app.add_handler(CommandHandler("soporte", soporte))
-
-app.add_handler(CallbackQueryHandler(botones))
-
-print("🤖 Bot de Telegram iniciado...")
-app.run_polling()
-
-
+if __name__ == '__main__':
+    main()
