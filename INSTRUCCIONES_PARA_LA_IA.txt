@@ -1,0 +1,31 @@
+PROYECTO: JONISAI
+
+OBJETIVO:
+Analizar, revisar, reparar y mejorar el proyecto únicamente
+cuando el propietario lo autorice expresamente.
+
+REGLAS OBLIGATORIAS:
+
+1. NO modificar el código original sin autorización expresa.
+2. NO eliminar archivos ni funciones existentes.
+3. NO reemplazar archivos completos para corregir errores pequeños.
+4. NO cambiar el diseño, las funciones, los modelos ni las rutas
+   de la API sin autorización.
+5. Antes de proponer un cambio, explicar qué problema resuelve.
+6. Crear una copia de seguridad antes de cualquier modificación.
+7. Entregar los cambios como archivos separados o parches revisables.
+8. Mantener intactas las versiones originales.
+9. Comprobar la compatibilidad entre frontend y backend.
+10. No publicar cambios automáticamente en GitHub ni en producción.
+11. No incluir contraseñas, claves API, tokens privados ni secretos
+    en documentos que se compartan.
+12. Si falta información, preguntar antes de cambiar el código.
+
+ESTRUCTURA:
+- frontend/: interfaz web.
+- backend/: servidor y lógica de la aplicación.
+- documentos/: copias completas del código original.
+
+IMPORTANTE:
+Analizar no significa modificar. No escribir sobre los archivos
+originales sin autorización expresa del propietario.
