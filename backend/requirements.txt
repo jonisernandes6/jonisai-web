@@ -1,0 +1,6 @@
+Flask
+flask-cors
+huggingface-hub
+openai
+gunicorn
+python-telegram-bot
